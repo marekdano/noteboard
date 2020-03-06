@@ -5,6 +5,14 @@ module.exports = {
     author: `@marekdano`,
   },
   plugins: [
+    {
+      resolve: "gatsby-source-graphql",
+      options: {
+        typeName: "NBAPI",
+        fieldName: "nbapi",
+        url: "https://bgigc9pnyb.execute-api.us-east-1.amazonaws.com/dev/graphql",
+      },
+    },
     `gatsby-plugin-react-helmet`,
     {
       resolve: `gatsby-source-filesystem`,

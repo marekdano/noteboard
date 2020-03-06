@@ -8,12 +8,17 @@
 import React from 'react'
 import { navigate } from 'gatsby'
 import { AuthProvider } from 'react-use-auth'
+import { ApolloProvider } from 'react-apollo-hooks'
+
+import { client } from './src/apollo'
 
 export const wrapRootElement = ({ element }) => (
-	<AuthProvider navigate={navigate} 
-		auth0_domain="noteboard.eu.auth0.com"
-		auth0_client_id="VY59LNL6GmSyrehAXlJsZ8zTIkWK5Mmi"
-	>
-		{element}
-	</AuthProvider>
+	<ApolloProvider client={client}>
+		<AuthProvider navigate={navigate} 
+			auth0_domain="noteboard.eu.auth0.com"
+			auth0_client_id="VY59LNL6GmSyrehAXlJsZ8zTIkWK5Mmi"
+		>
+			{element}
+		</AuthProvider>
+	</ApolloProvider>
 )
