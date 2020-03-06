@@ -1,12 +1,21 @@
 import React from "react"
 import { useAuth } from 'react-use-auth'
+import { useQuery } from 'react-apollo-hooks'
+import gql from 'graphql-tag'
 
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 
 const IndexPage = () => {
   const { isAuthenticated, user, login, logout } = useAuth()
-  console.table(isAuthenticated(), user)
+
+  const { data, loading } = useQuery(gql`
+    query {
+      notes {
+        content
+      }
+    }
+  `)
 
   return (
     <Layout>
@@ -23,7 +32,12 @@ const IndexPage = () => {
       }
       <p>Stick your ordinary note on the board.</p>
 
-      <h5>No notes yet</h5>
+      { data && data.notes && data.notes.length ?
+        <ul>
+          { data.notes.map(note => (<li>{note.content}</li>)) }
+        </ul> :
+        <h5>No notes yet</h5>
+      }
     </Layout>
   )
 }
