@@ -1,43 +1,10 @@
-import React, { useEffect } from "react"
-import { useAuth } from 'react-use-auth'
-import { useQuery, useMutation } from 'react-apollo-hooks'
+import React from "react"
+import { useQuery } from 'react-apollo-hooks'
 import gql from 'graphql-tag'
 
 import Layout from "../components/layout"
 import SEO from "../components/seo"
-
-const LoginButton = () => {
-  const { isAuthenticated, user, userId, login, logout } = useAuth()
-
-  const [updateUser, { data }] = useMutation(
-    gql`
-      mutation updateUser($userId: String) {
-        updateUser(userId: $userId) {
-          userId
-        }
-      }
-    `,
-    {
-      variables: {
-        userId
-      }
-    }
-  )
-
-  useEffect(() => {
-    userId && updateUser()
-  }, [userId])
-  
-  return isAuthenticated() ? 
-    <>
-      <button onClick={logout}>Logout</button>
-      <p>Hello, { user.name }</p>
-    </> : 
-    <>
-      <button onClick={login}>Login</button>
-      <p>Hello, everybody</p>
-    </>
-}
+import LoginButton from "../components/login-button"
 
 const IndexPage = () => {
   const { data } = useQuery(gql`
