@@ -1,7 +1,13 @@
 import { getItem, updateItem } from "./dynamodb"
+import { v4 as uuidv4 } from "uuid"
 
 type UserParams = {
 	userId: string;
+}
+
+type CreateNoteParams = {
+	userId: string;
+	content: string;
 }
 
 export const updateUser = async (_: any, params: UserParams): Promise<User> => {
@@ -50,3 +56,23 @@ export const updateUser = async (_: any, params: UserParams): Promise<User> => {
 		lastSignedInAt: user ? user.lastSignedInAt : null
 	};
 }
+
+export const createNote = async (_: any, params: CreateNoteParams) => {
+	const noteId = uuidv4();
+
+	const result = await updateItem({
+		TableName: process.env.NOTE_TABLE!,
+		Key: {
+			userId: params.userId,
+			noteId
+		},
+		UpdateExpression: "SET content = :content, createdAt = :createdAt",
+		ExpressionAttributeValues: {
+			":content": params.content,
+			":createdAt": new Date().toISOString()
+		},
+		ReturnValues: "ALL_NEW"
+	});
+
+	return result.Attributes;
+};

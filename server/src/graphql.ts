@@ -1,16 +1,19 @@
 import { ApolloServer, gql } from "apollo-server-lambda"
 
-import { updateUser } from "./mutations";
+import { updateUser, createNote } from "./mutations";
 
 const schema = gql`
-	type Note {
-		content: String
-	}
-
 	type User {
 		userId: String
 		createdAt: String
 		lastSignedInAt: String
+	}
+
+	type Note {
+		userId: String
+		noteId: String
+		content: String
+		createdAt: String
 	}
 
 	type Query {
@@ -19,19 +22,31 @@ const schema = gql`
 
 	type Mutation {
 		updateUser(userId: String): User
+		createNote(userId: String, content: String): Note
 	}
 `
 
 const resolvers = {
 	Query: {
 		notes: () => ([
-			{ content: "Life is beatuful"},
-			{ content: "Believe in yourself"}
+			{ 
+				userId: 1,
+				noteId: 1,
+				content: "Life is beatuful",
+				createdAt: "2020-10-10T00:00:00Z"
+			},
+			{ 
+				userId: 1,
+				noteId: 2,
+				content: "Believe in yourself",
+				createdAt: "2020-11-11T00:00:00Z"
+			}
 		])
 	},
 	Mutation: {
-		updateUser
-}
+		updateUser,
+		createNote,
+	}
 }
 
 const server = new ApolloServer({ typeDefs: schema, resolvers })
