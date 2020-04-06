@@ -9,6 +9,7 @@ import React from 'react'
 import { navigate } from 'gatsby'
 import { AuthProvider } from 'react-use-auth'
 import { ApolloProvider } from 'react-apollo-hooks'
+import './src/scss/global.scss';
 
 import { client } from './src/apollo'
 
