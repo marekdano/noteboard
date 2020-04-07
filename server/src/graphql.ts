@@ -5,6 +5,7 @@ import { updateUser, createNote, updateNote, deleteNote } from "./mutations";
 const schema = gql`
 	type User {
 		userId: String
+		username: String
 		createdAt: String
 		lastSignedInAt: String
 	}
@@ -21,7 +22,7 @@ const schema = gql`
 	}
 
 	type Mutation {
-		updateUser(userId: String): User
+		updateUser(userId: String, username: String): User
 		createNote(userId: String, content: String): Note
 		updateNote(userId: String, noteId: String, content: String): Note
 		deleteNote(userId: String, noteId: String): Note

@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from "uuid"
 
 type UserParams = {
 	userId: string;
+	username: string;
 }
 
 type CreateNoteParams = {
@@ -22,7 +23,7 @@ type DeleteNoteParams = {
 }
 
 export const updateUser = async (_: any, params: UserParams): Promise<User> => {
-	const { userId } = params;
+	const { userId, username } = params;
 
 	let result = await getItem({
 		TableName: process.env.USER_TABLE!,
@@ -37,8 +38,9 @@ export const updateUser = async (_: any, params: UserParams): Promise<User> => {
 		const result = await updateItem({
 			TableName: process.env.USER_TABLE!,
 			Key: { userId },
-			UpdateExpression: "SET lastSignedInAt = :lastSignedInAt",
+			UpdateExpression: "SET username = :username, lastSignedInAt = :lastSignedInAt",
 			ExpressionAttributeValues: {
+				":username": username,
 				":lastSignedInAt": new Date().toISOString()
 			},
 			ReturnValues: "ALL_NEW"
@@ -50,8 +52,9 @@ export const updateUser = async (_: any, params: UserParams): Promise<User> => {
 			TableName: process.env.USER_TABLE!,
 			Key: { userId },
 			UpdateExpression: 
-				"SET createdAt = :createdAt, lastSignedInAt = :lastSignedInAt",
+				"SET createdAt = :createdAt, username = :username, lastSignedInAt = :lastSignedInAt",
 			ExpressionAttributeValues: {
+				":username": username,
 				":createdAt": new Date().toISOString(),
 				":lastSignedInAt": new Date().toISOString()
 			},
@@ -63,6 +66,7 @@ export const updateUser = async (_: any, params: UserParams): Promise<User> => {
 
 	return {
 		userId,
+		username,
 		createdAt: user ? user.createdAt : null,
 		lastSignedInAt: user ? user.lastSignedInAt : null
 	};
