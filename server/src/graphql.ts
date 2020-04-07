@@ -1,6 +1,6 @@
 import { ApolloServer, gql } from "apollo-server-lambda"
 
-import { updateUser, createNote } from "./mutations";
+import { updateUser, createNote, updateNote, deleteNote } from "./mutations";
 
 const schema = gql`
 	type User {
@@ -23,6 +23,8 @@ const schema = gql`
 	type Mutation {
 		updateUser(userId: String): User
 		createNote(userId: String, content: String): Note
+		updateNote(userId: String, noteId: String, content: String): Note
+		deleteNote(userId: String, noteId: String): Note
 	}
 `
 
@@ -46,6 +48,8 @@ const resolvers = {
 	Mutation: {
 		updateUser,
 		createNote,
+		updateNote,
+		deleteNote
 	}
 }
 
