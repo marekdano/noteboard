@@ -30,15 +30,27 @@ const LoginButton = () => {
 	const { isAuthenticated, user, userId, login, logout } = useAuth()
 	useUpdateUser(userId, user.name)
 	
-	return isAuthenticated() ? 
+	return isAuthenticated() ? (
 		<>
-			<button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full" onClick={logout}>Logout</button>
-			<p>Hello, { user.name }</p>
-		</> : 
+		<button 
+			className="bg-blue-500 hover:bg-blue-700 text-white text-sm font-bold py-1 px-2 rounded" 
+			onClick={logout}
+		>
+			Logout
+		</button>
+		
+	</>
+	) : (
 		<>
-			<button onClick={login}>Login</button>
-			<p>Hello, everybody</p>
+			<button 
+				className="bg-transparent hover:bg-blue-500 text-blue-700 text-sm font-semibold hover:text-white py-1 px-2 border border-blue-500 hover:border-transparent rounded"
+				onClick={login}
+			>
+				Add a note
+			</button>
 		</>
+	) 
 }
+		
 
 export default LoginButton
