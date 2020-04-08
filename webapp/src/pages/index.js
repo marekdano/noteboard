@@ -1,32 +1,20 @@
 import React from "react"
-import { useQuery } from 'react-apollo-hooks'
-import gql from 'graphql-tag'
+import { useAuth } from "react-use-auth"
 
 import Layout from "../components/layout"
 import SEO from "../components/seo"
-import LoginButton from "../components/login-button"
+import LoginButton from "../components/LoginButton"
+import { Dashboard } from "../components/Dashboard"
 
 const IndexPage = () => {
-  const { data } = useQuery(gql`
-    query {
-      notes {
-        content
-      }
-    }
-  `)
+  const { isAuthenticated } = useAuth()
 
   return (
     <Layout>
       <SEO title="noteboard" />
-      <LoginButton />
-      <p>Stick your ordinary note on the board.</p>
+      <Dashboard />
 
-      { data && data.notes && data.notes.length ?
-        <ul>
-          { data.notes.map((note, index) => (<li key={index}>{note.content}</li>)) }
-        </ul> :
-        <h5>No notes yet</h5>
-      }
+      <LoginButton />
     </Layout>
   )
 }
