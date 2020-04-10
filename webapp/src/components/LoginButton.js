@@ -1,10 +1,10 @@
 import React, { useEffect } from "react"
-import { useAuth } from 'react-use-auth'
+import { useAuth } from "react-use-auth"
 import { useMutation } from 'react-apollo-hooks'
 import gql from 'graphql-tag'
 
 export function useUpdateUser(userId, username) {
-	const [updateUser, { data }] = useMutation(
+	const [updateUser] = useMutation(
 		gql`
 			mutation updateUser($userId: String, $username: String) {
 				updateUser(userId: $userId, username: $username) {
@@ -43,7 +43,7 @@ const LoginButton = () => {
 	) : (
 		<>
 			<button 
-				className="bg-transparent hover:bg-blue-500 text-blue-700 text-sm font-semibold hover:text-white py-1 px-2 border border-blue-500 hover:border-transparent rounded"
+				className="bg-transparent hover:bg-blue-500 text-white text-sm font-semibold hover:text-white py-1 px-2 border border-blue-500 hover:border-transparent rounded"
 				onClick={login}
 			>
 				Add a note
@@ -51,6 +51,5 @@ const LoginButton = () => {
 		</>
 	) 
 }
-		
 
 export default LoginButton
