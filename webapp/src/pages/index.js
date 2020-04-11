@@ -7,7 +7,7 @@ import { Dashboard } from "../components/Dashboard"
 const IndexPage = () => {
   return (
     <Layout>
-      <SEO title="noteboard" />
+      <SEO title="positive noteboard" />
       <Dashboard />
     </Layout>
   )

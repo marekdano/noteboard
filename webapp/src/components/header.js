@@ -6,7 +6,7 @@ import LoginButton from "./LoginButton"
 const Header = ({ siteTitle }) => (
   <header
     style={{
-      background: `rebeccapurple`,
+      background: `purple`,
       marginBottom: `1.45rem`,
     }}
   >

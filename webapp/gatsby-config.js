@@ -1,6 +1,6 @@
 module.exports = {
   siteMetadata: {
-    title: `Noteboard`,
+    title: `Positive notes`,
     description: `Create a note and add it to the board.`,
     author: `@marekdano`,
   },
