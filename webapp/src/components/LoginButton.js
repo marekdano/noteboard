@@ -46,7 +46,7 @@ const LoginButton = () => {
 				className="bg-transparent hover:bg-blue-500 text-white text-sm font-semibold hover:text-white py-1 px-2 border border-blue-500 hover:border-transparent rounded"
 				onClick={login}
 			>
-				Add a note
+				Login to add a note
 			</button>
 		</>
 	) 

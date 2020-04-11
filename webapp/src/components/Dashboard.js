@@ -7,6 +7,7 @@ export const Dashboard = () => {
 	const { data } = useQuery(gql`
     query {
       notes {
+				noteId
         content
       }
     }
@@ -15,7 +16,7 @@ export const Dashboard = () => {
   const { isAuthenticated, user } = useAuth()
 
   return (
-    <div>
+    <>
 			{ isAuthenticated() ? 
 				<>
 					<p>
@@ -27,16 +28,28 @@ export const Dashboard = () => {
 				: null
 			}
 			
-
-			<h2>Public notes</h2>
-
-			{ data && data.notes && data.notes.length ?
-				<ul>
-					{ data.notes.map((note, index) => (<li key={index}>{note.content}</li>)) }
-				</ul> :
-				<h5>No notes yet</h5>
-			}
-
-		</div>
+			<main className="flex content-start flex-wrap p-4 border-8 border-red-800 notes">
+				{ data && data.notes && data.notes.length &&
+					data.notes.map((note, index) => (
+						<div
+							key={note.noteId}
+							className={`
+								m-2 w-40 h-40 bg-pink-400 shadow-md border border-gray-400 
+								transform ${index % 2 && '-rotate-3'} cursor-pointer
+								hover:scale-100 hover:rotate-3
+							`}
+						>
+							<div className="w-5 h-5 rounded-lg mt-1 mx-auto shadow-md pin"></div>
+							<div
+								className="p-4"
+							>
+								{note.content}
+							</div>
+						</div>
+						
+					))
+				}
+			</main>
+		</>
   )
 }
