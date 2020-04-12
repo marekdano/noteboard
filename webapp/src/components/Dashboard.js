@@ -21,9 +21,9 @@ export const Dashboard = () => {
 				<>
 					<p>
 						Hello <strong>{user.nickname}</strong>, what note are you going to create
-						today?
+						today? <span>Stick</span> your note on the board.
 					</p>
-					<p>Stick your ordinary note on the board.</p>
+					<p></p>
 				</>
 				: null
 			}
@@ -34,14 +34,20 @@ export const Dashboard = () => {
 						<div
 							key={note.noteId}
 							className={`
-								m-2 w-40 h-40 bg-pink-400 shadow-md border border-gray-400 
+								m-2 w-40 h-40 bg-red-200 shadow-md border border-gray-400 
 								transform ${index % 2 && '-rotate-3'} cursor-pointer
+								${index % 3 === 0 && 'bg-blue-200'}
 								hover:scale-100 hover:rotate-3
 							`}
 						>
-							<div className="w-5 h-5 rounded-lg mt-1 mx-auto shadow-md pin"></div>
+							<div 
+								className={`
+									w-5 h-5 rounded-lg mt-1 mx-auto shadow-md 
+									${index % 2 ? 'pin1' : 'pin2'}
+								`}
+							/>
 							<div
-								className="p-4"
+								className="p-4 note"
 							>
 								{note.content}
 							</div>

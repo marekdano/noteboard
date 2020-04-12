@@ -6,6 +6,16 @@ main.notes {
 	background: url('../images/cork-image.png')
 }
 
-.pin {
+.pin1 {
   background: radial-gradient(yellow 50%, black 100%);
+}
+
+.pin2 {
+  background: radial-gradient(red 50%, black 100%);
+}
+
+.note {
+	font-family: 'Caveat', cursive;
+	font-size: 1.08rem;
+	line-height: 1.2;
 }
