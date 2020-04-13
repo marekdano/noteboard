@@ -1,9 +1,11 @@
-import React from "react"
+import React, { useState } from "react"
 import { useAuth } from "react-use-auth"
 import { useQuery } from "react-apollo-hooks"
 import gql from "graphql-tag"
 
 export const Dashboard = () => {
+	const [isFormOpen, setIsFormOpen] = useState(false)
+
 	const { data } = useQuery(gql`
     query {
       notes {
@@ -13,7 +15,11 @@ export const Dashboard = () => {
     }
   `)
 
-  const { isAuthenticated, user } = useAuth()
+	const { isAuthenticated, user } = useAuth()
+	
+	const handleFormSection = (state = false) => {
+		setIsFormOpen(state)
+	}
 
   return (
     <>
@@ -21,9 +27,26 @@ export const Dashboard = () => {
 				<>
 					<p>
 						Hello <strong>{user.nickname}</strong>, what note are you going to create
-						today? <span>Stick</span> your note on the board.
+						today?
+						<span 
+							className="ml-1 underline text-blue-600 font-semibold cursor-pointer hover:text-blue-800" 
+							onClick={() => handleFormSection(true)}
+						>
+							Stick
+						</span> your note on the board.
 					</p>
-					<p></p>
+
+					
+					{isFormOpen && 
+						<section className="w-10">
+							<input placeholder="Enter your note" />
+							<button 
+								className="text-2xl font-semibold transition duration-100 ease-in-out transform hover:scale-125"
+								aria-label="close form for adding notes" 
+								onClick={() => handleFormSection(false)}
+							>&times;</button>
+						</section>
+					}
 				</>
 				: null
 			}
@@ -52,7 +75,6 @@ export const Dashboard = () => {
 								{note.content}
 							</div>
 						</div>
-						
 					))
 				}
 			</main>
