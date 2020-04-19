@@ -1,5 +1,6 @@
-import { getItem, updateItem, deleteItem } from "./dynamodb"
 import { v4 as uuidv4 } from "uuid"
+import { updateItem, deleteItem } from "./dynamodb"
+import { getUser } from "./queries"
 
 type UserParams = {
 	userId: string;
@@ -24,15 +25,7 @@ type DeleteNoteParams = {
 
 export const updateUser = async (_: any, params: UserParams): Promise<User> => {
 	const { userId, username } = params;
-
-	let result = await getItem({
-		TableName: process.env.USER_TABLE!,
-		Key: {
-			userId
-		}
-	});
-
-	let user = result.Item;
+	let user = await getUser(userId);
 
 	if (user) {
 		const result = await updateItem({
@@ -74,11 +67,13 @@ export const updateUser = async (_: any, params: UserParams): Promise<User> => {
 
 export const createNote = async (_: any, params: CreateNoteParams) => {
 	const noteId = uuidv4();
+	const { userId } = params;
+	const user = await getUser(userId);
 
 	const result = await updateItem({
 		TableName: process.env.NOTE_TABLE!,
 		Key: {
-			userId: params.userId,
+			userId: userId,
 			noteId
 		},
 		UpdateExpression: "SET content = :content, createdAt = :createdAt",
@@ -89,11 +84,18 @@ export const createNote = async (_: any, params: CreateNoteParams) => {
 		ReturnValues: "ALL_NEW"
 	});
 
-	return result.Attributes;
+	const note = result.Attributes;
+
+	return {
+		user,
+		...note
+	}
+		
 };
 
 export const updateNote = async (_:any, params: UpdateNoteParams) => {
 	const { userId, noteId, content } = params;
+	const user = await getUser(userId);
 
 	const result = await updateItem({
 		TableName: process.env.NOTE_TABLE!,
@@ -108,11 +110,17 @@ export const updateNote = async (_:any, params: UpdateNoteParams) => {
 		ReturnValues: "ALL_NEW"
 	});
 
-	return result.Attributes;
+	const note = result.Attributes;
+
+	return {
+		user,
+		...note
+	}
 }
 
 export const deleteNote = async (_: any, params: DeleteNoteParams) => {
 	const { userId, noteId } = params;
+	const user = await getUser(userId);
 
 	const result = await deleteItem({
 		TableName: process.env.NOTE_TABLE!,
@@ -122,5 +130,10 @@ export const deleteNote = async (_: any, params: DeleteNoteParams) => {
 		}
 	});
 
-	return result.Attributes;
+	const note = result.Attributes;
+
+	return {
+		user,
+		...note
+	}
 }
