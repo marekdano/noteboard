@@ -1,6 +1,7 @@
 import { ApolloServer, gql } from "apollo-server-lambda"
 
 import { updateUser, createNote, updateNote, deleteNote } from "./mutations";
+import { notes, note } from "./queries";
 
 const schema = gql`
 	type User {
@@ -11,6 +12,7 @@ const schema = gql`
 	}
 
 	type Note {
+		user: User
 		userId: String
 		noteId: String
 		content: String
@@ -19,6 +21,7 @@ const schema = gql`
 
 	type Query {
 		notes: [Note]
+		note(userId: String, noteId: String): Note
 	}
 
 	type Mutation {
@@ -31,20 +34,8 @@ const schema = gql`
 
 const resolvers = {
 	Query: {
-		notes: () => ([
-			{ 
-				userId: 1,
-				noteId: 1,
-				content: "Life is beatuful",
-				createdAt: "2020-10-10T00:00:00Z"
-			},
-			{ 
-				userId: 1,
-				noteId: 2,
-				content: "Believe in yourself",
-				createdAt: "2020-11-11T00:00:00Z"
-			}
-		])
+		notes,
+		note
 	},
 	Mutation: {
 		updateUser,
