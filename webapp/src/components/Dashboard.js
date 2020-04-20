@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { useAuth } from "react-use-auth"
 import { useQuery } from "react-apollo-hooks"
 import gql from "graphql-tag"
@@ -6,22 +6,40 @@ import NoteForm from "./NoteForm"
 
 export const Dashboard = () => {
 	const [isFormOpen, setIsFormOpen] = useState(false)
+	const [notes, setNotes] = useState([])
 
 	const { data } = useQuery(gql`
     query {
       notes {
+				user {
+					userId
+					username
+				}
 				noteId
         content
       }
     }
-  `)
+	`)
 
-	const { isAuthenticated, user } = useAuth()
+	useEffect(() => {
+		if (data) {
+			setNotes(data.notes)
+		}
+	}, [data])
+
+	const { isAuthenticated, user, userId } = useAuth()
 
 	const handleToOpenFormSection = (state = false) => {
 		setIsFormOpen(state)
 	}
 	
+	const addCreatedNote = (note = null) => {
+		if (note) {
+			setNotes([note, ...notes])
+			setIsFormOpen(false)
+		}
+	}
+
   return (
     <>
 			{ isAuthenticated() ? 
@@ -39,23 +57,22 @@ export const Dashboard = () => {
 
 					
 					{isFormOpen && 
-						<NoteForm isFormOpen={isFormOpen} handleToOpenFormSection={handleToOpenFormSection}/>
+						<NoteForm 
+							userId={userId}
+							isFormOpen={isFormOpen} 
+							handleToOpenFormSection={handleToOpenFormSection} 
+							addCreatedNote={addCreatedNote}
+						/>
 					}
 				</>
 				: null
 			}
 			
-			<main className="flex content-start flex-wrap p-4 border-8 border-red-800 notes">
-				{ data && data.notes && data.notes.length &&
-					data.notes.map((note, index) => (
+			<main className="flex content-start flex-wrap p-3 border-8 border-red-800 notes">
+				{ notes && notes.map((note, index) => (
 						<div
 							key={note.noteId}
-							className={`
-								m-2 w-40 h-40 bg-red-200 shadow-md border border-gray-400 
-								transform ${index % 2 && '-rotate-3'} cursor-pointer
-								${index % 3 === 0 && 'bg-blue-200'}
-								hover:scale-100 hover:rotate-3
-							`}
+							className={` m-2 w-40 h-40 bg-red-200 shadow-md border border-gray-400 px-4 transform ${index % 2 && '-rotate-3'} cursor-pointer ${index % 3 === 0 && 'bg-blue-200'} hover:scale-100 hover:rotate-3`}
 						>
 							<div 
 								className={`
@@ -63,10 +80,11 @@ export const Dashboard = () => {
 									${index % 2 ? 'pin1' : 'pin2'}
 								`}
 							/>
-							<div
-								className="p-4 note"
-							>
+							<div className="note">
 								{note.content}
+							</div>
+							<div>
+								{note.user.username}
 							</div>
 						</div>
 					))
